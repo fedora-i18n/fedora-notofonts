@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fedora-notofonts"
+version = "0.1"
+authors = [
+  { name = "Fedora I18N team", email="i18n@lists.fedoraproject.org" }
+]
+description = "Noto Fonts packaging helper for Fedora"
+readme = "README.md"
+requires-python = ">= 3.11"
+license.file = "LICENSE"
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3",
+]
+keywords = [
+  "fedora",
+  "fonts",
+  "packaging",
+  "notofonts",
+]
+dependencies = [
+  "fontrpmspec",
+  "pygithub",
+  "xdg",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/fedora-i18n/fedora-notofonts"
+"Bug Tracker" = "https://github.com/fedora-i18n/fedora-notofonts/issues"
+
+[project.entry-points.console_scripts]
+"fn-pkg" = "pyfednotofonts.frontend:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+namespaces = true
+exclude = [ "tests" ]
+
+[tool.setuptools.package-data]
