@@ -1,5 +1,5 @@
 # Copyright (C) 2023 fedora-notofonts Authors
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Module to package Noto Fonts from github."""
 
 import argparse
