@@ -36,6 +36,7 @@ class FnSubcommand(object):
     def __init__(self, cmd: str, helpstring: str):
         """Initialize sub-command."""
         self.info = FnSubcommandInfo(cmd, helpstring)
+        self.token = None
 
     def register(self, parser: ArgumentParser) -> None:
         """Abstract function to register a sub-command."""
@@ -47,11 +48,7 @@ class FnSubcommand(object):
 
     def set_token(self, token: str) -> None:
         """Set a GitHub token."""
-        self.do_set_token(token)
-
-    def do_set_token(self, token: str) -> None:
-        """Real function to set a GitHub token."""
-        pass
+        self.token = token
 
 
 class FnSubcommandInfo(object):
