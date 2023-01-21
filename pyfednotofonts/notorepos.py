@@ -22,6 +22,10 @@ class NotoRelease:
         self.version = matched.group(2)
         self.assets = assets
 
+    def comparable_version(self):
+        """Return packaging.version.Version instance."""
+        return parse(self.version)
+
 
 class NotoRepos:
     """Operate gethering some information through GitHub REST API."""
