@@ -5,6 +5,8 @@
 import sys
 from argparse import ArgumentParser
 from pathlib import Path
+from urllib.parse import urlparse
+from urllib.request import urlretrieve
 try:
     from subcommand import FnSubcommand
 except ImportError:
@@ -31,6 +33,13 @@ class FnSubCmdGenSpec(FnSubcommand):
                             '--outputdir',
                             default='.',
                             help='Output directory')
+        parser.add_argument('--ignore-error',
+                            nargs='*',
+                            help='Deal with the specific error as warning')
+        parser.add_argument('-v',
+                            '--verbose',
+                            action='store_true',
+                            help='Verbose operation')
         parser.add_argument('PROJECT', help='Project name')
 
     def handler(self, args: ArgumentParser) -> None:
@@ -44,11 +53,23 @@ class FnSubCmdGenSpec(FnSubcommand):
             m([': ']).info(args.PROJECT).error('No releases.').out()
             sys.exit(1)
         for k, v in releases[args.PROJECT].items():
+            assets = [
+                i.browser_download_url for vv in v for i in list(vv.assets)
+            ]
+            for a in assets:
+                fn = Path(urlparse(a).path).name
+                if args.outputdir:
+                    fn = str(Path(args.outputdir) / fn)
+                if not Path(fn).exists():
+                    if args.verbose:
+                        m([' ']).message('Downloading from').info(a).out()
+                    urlretrieve(a, fn)
             templates = gen.generate(
                 k,
-                [i.browser_download_url for vv in v for i in list(vv.assets)],
+                assets,
                 f'https://github.com/notofonts/{args.PROJECT}',
-                excludepath=['unhinted', 'hinted', 'googlefonts'])
+                excludepath=['unhinted', 'hinted', 'googlefonts'],
+                ignore_error=args.ignore_error)
             fe = sum(list(templates['fontconfig'][0]._families.values()),
                      [])[0]
             specname = Package.build_package_name('google', fe.family)
