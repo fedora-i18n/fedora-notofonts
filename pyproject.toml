@@ -26,7 +26,7 @@ keywords = [
   "notofonts",
 ]
 dependencies = [
-  "fontrpmspec >= 0.7",
+  "fontrpmspec >= 0.8",
   "pygithub",
   "xdg",
 ]
