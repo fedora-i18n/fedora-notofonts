@@ -3,7 +3,7 @@
 """Noto fonts GitHub repositories related code."""
 
 import re
-from github import Github
+from github import Github, GithubException
 from packaging.version import parse
 from typing import Any
 
@@ -48,14 +48,14 @@ class NotoRepos:
         include = kwargs['include'] if 'include' in kwargs else []
 
         retval = {}
-        if len(include) == 0 or len(include) > 50:
+        try:
             repos = self.github.get_organization('notofonts').get_repos(
-                type='public')
-        else:
-            repos = [
-                self.github.get_organization('notofonts').get_repo(n)
-                for n in include
-            ]
+                type='public') if len(include) == 0 or len(include) > 50 else [
+                    self.github.get_organization('notofonts').get_repo(n)
+                    for n in include
+                ]
+        except GithubException:
+            return retval
         for repo in repos:
             if repo.name in excludelist or repo.archived is True:
                 continue
