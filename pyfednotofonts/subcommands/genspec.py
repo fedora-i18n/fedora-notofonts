@@ -68,7 +68,7 @@ class FnSubCmdGenSpec(FnSubcommand):
                 k,
                 assets,
                 f'https://github.com/notofonts/{args.PROJECT}',
-                excludepath=['unhinted', 'hinted', 'googlefonts'],
+                excludepath=['unhinted', 'hinted', 'full'],
                 ignore_error=args.ignore_error)
             fe = sum(list(templates['fontconfig'][0]._families.values()),
                      [])[0]
