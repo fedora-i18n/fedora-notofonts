@@ -78,6 +78,9 @@ class FnSubCmdGenSpec(FnSubcommand):
                 k,
                 assets,
                 f'https://github.com/notofonts/{args.PROJECT}',
+                # We need Epoch because the original google-noto-fonts'
+                # versioning was based on date.
+                epoch=1,
                 common_description=(
                     'Noto is a collection of high-quality fonts with'
                     ' multiple weights and widths in sans, serif, mono'
