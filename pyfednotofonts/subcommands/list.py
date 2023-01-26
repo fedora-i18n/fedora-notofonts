@@ -19,7 +19,9 @@ class FnSubCmdList(FnSubcommand):
 
     def __init__(self):
         """Initialize sub-command."""
-        FnSubcommand.__init__(self, 'list', 'List available repo')
+        FnSubcommand.__init__(self, 'list', 'List available repo',
+                              ('List project names under notofonts at GitHub '
+                               'which have any releases.'))
 
     def do_register(self, parser: ArgumentParser) -> None:
         """Register arguments for sub-command."""

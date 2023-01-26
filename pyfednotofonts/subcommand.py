@@ -33,9 +33,9 @@ class FnSubcommand(object):
 
         return FnSubcommand._subcommands
 
-    def __init__(self, cmd: str, helpstring: str):
+    def __init__(self, cmd: str, helpstring: str, description: str = ''):
         """Initialize sub-command."""
-        self.info = FnSubcommandInfo(cmd, helpstring)
+        self.info = FnSubcommandInfo(cmd, helpstring, description)
         self.token = None
 
     def register(self, parser: ArgumentParser) -> None:
@@ -54,7 +54,8 @@ class FnSubcommand(object):
 class FnSubcommandInfo(object):
     """Sub-command Information class."""
 
-    def __init__(self, cmd: str, helpstring: str):
+    def __init__(self, cmd: str, helpstring: str, description: str):
         """Initialize SubcommandInfo class."""
         self.command = cmd
         self.help_string = helpstring
+        self.description = description

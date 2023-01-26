@@ -23,7 +23,10 @@ class FnSubCmdDownload(FnSubcommand):
 
     def __init__(self):
         """Initialize sub-command."""
-        FnSubcommand.__init__(self, 'download', 'Download a release')
+        FnSubcommand.__init__(
+            self, 'download', 'Download a release',
+            ('Download a release for PROJECT. if no release tag is set,'
+             ' the latest assets will be used.'))
 
     def do_register(self, parser: ArgumentParser) -> None:
         """Register arguments for sub-command."""

@@ -28,7 +28,11 @@ class FnSubCmdGenSpec(FnSubcommand):
 
     def __init__(self):
         """Initialize sub-command."""
-        FnSubcommand.__init__(self, 'genspec', 'Generate a RPM spec file')
+        FnSubcommand.__init__(
+            self, 'genspec', 'Generate a RPM spec file',
+            ('Generate RPM spec files and fontconfig cofig files for PROJECT. '
+             'If multiple assets is there, separate spec files will '
+             'be generated.'))
 
     def do_register(self, parser: ArgumentParser) -> None:
         """Register arguments for sub-command."""

@@ -34,7 +34,8 @@ def main():
     subparsers = parser.add_subparsers()
     for x in sorted(subcmds.keys()):
         pp = subparsers.add_parser(subcmds[x].info.command,
-                                   help=subcmds[x].info.help_string)
+                                   help=subcmds[x].info.help_string,
+                                   description=subcmds[x].info.description)
         subcmds[x].register(pp)
         subcmds[x].set_token(token)
         pp.set_defaults(handler=subcmds[x].handler)
