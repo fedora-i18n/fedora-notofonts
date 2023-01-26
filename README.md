@@ -16,7 +16,7 @@ $ pip3 install --user dist/fedora-notofonts*.whl
 ## Usage
 
 ``` shell
-usage: frondend.py [-h] {download,genspec,list} ...
+usage: fn-pkg [-h] {download,genspec,list} ...
 
 Noto Fonts packaging helper
 
