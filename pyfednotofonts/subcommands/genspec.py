@@ -74,6 +74,16 @@ class FnSubCmdGenSpec(FnSubcommand):
                 k,
                 assets,
                 f'https://github.com/notofonts/{args.PROJECT}',
+                common_description=(
+                    'Noto is a collection of high-quality fonts with'
+                    ' multiple weights and widths in sans, serif, mono'
+                    ' and other styles, in more than 1,000 languages'
+                    ' and over 150 writing systems.'),
+                # Use fonts under googlefonts only.
+                # 'full' may be better but this isn't necessarily available
+                # for all the projects.
+                # Dealing with full vs googlefonts per projects isn't
+                # realistic.
                 excludepath=['unhinted', 'hinted', 'full'],
                 ignore_error=args.ignore_error)
             fe = sum(list(templates['fontconfig'][0]._families.values()),
