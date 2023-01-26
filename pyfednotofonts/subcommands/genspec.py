@@ -2,6 +2,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Genspec sub-command module."""
 
+import shutil
+import subprocess
 import sys
 from argparse import ArgumentParser
 from pathlib import Path
@@ -15,6 +17,7 @@ try:
     from notorepos import NotoRepos
 except ImportError:
     from pyfednotofonts.notorepos import NotoRepos
+import pyfontrpmspec.errors as err
 import pyfontrpmspec.generator as gen
 from pyfontrpmspec.messages import Message as m
 from pyfontrpmspec.package import Package
@@ -36,6 +39,9 @@ class FnSubCmdGenSpec(FnSubcommand):
         parser.add_argument('--ignore-error',
                             nargs='*',
                             help='Deal with the specific error as warning')
+        parser.add_argument('--build',
+                            action='store_true',
+                            help='Build RPM packages')
         parser.add_argument('-v',
                             '--verbose',
                             action='store_true',
@@ -79,6 +85,39 @@ class FnSubCmdGenSpec(FnSubcommand):
             for fc in templates['fontconfig']:
                 fc.path = args.outputdir
                 fc.write()
+            if args.build:
+                self.build(specname, args.outputdir, args.outputdir)
+
+    def build(self, id: str, sourcedir: str, outputdir: str) -> None:
+        """Build RPM package."""
+        specname = id + '.spec'
+        rpmbuild = shutil.which('rpmbuild')
+        if rpmbuild is None:
+            m([': ']).error('rpmbuild not found.').throw(err.FileNotFoundError)
+        p = Path(f'{outputdir}')
+        srcdir = str(Path(f'{sourcedir}').resolve())
+        builddir = str((p / 'BUILD').resolve())
+        rpmdir = str((p / 'out').resolve())
+        logfile = str((p / 'out' / f'build-{specname}.log').resolve())
+        try:
+            rpmbuild = subprocess.Popen([
+                rpmbuild, '-ba', '--define', f'_specdir {srcdir}', '--define',
+                f'_builddir {builddir}', '--define', f'_sourcedir {srcdir}',
+                '--define', f'_srcrpmdir {rpmdir}', '--define',
+                f'_rpmdir {rpmdir}', '--define',
+                ('_rpmfilename %%{ARCH}/%%{NAME}-%%{VERSION}-%%{RELEASE}'
+                 '.%%{ARCH}.rpm'), specname
+            ],
+                                        stdout=subprocess.PIPE,
+                                        stderr=subprocess.STDOUT)
+            subprocess.check_call(('tee', logfile), stdin=rpmbuild.stdout)
+            rpmbuild.communicate()
+            m([' ']).message('Build finished with the exit code').info(
+                rpmbuild.returncode).out()
+        except subprocess.CalledProcessError:
+            m().error('Buld failed.').throw(RuntimeError)
+        finally:
+            shutil.rmtree(builddir)
 
 
 SUBCMD = [FnSubCmdGenSpec()]
